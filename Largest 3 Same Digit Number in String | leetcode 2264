@@ -1,0 +1,15 @@
+problem: https://leetcode.com/problems/largest-3-same-digit-number-in-string/description/?envType=daily-question&envId=2025-08-14
+
+solution: class Solution {
+public:
+    string largestGoodInteger(string num) {
+        int count = 1, maxNum = -1;
+        for(int i=1; i<num.size(); i++){
+            if(num[i] == num[i-1]) count++;
+            else count = 1;
+            if(count == 3) maxNum = max(maxNum, (num[i] - '0'));
+        }
+
+        return maxNum == -1 ? "" : string(3, maxNum + '0');
+    }
+};
