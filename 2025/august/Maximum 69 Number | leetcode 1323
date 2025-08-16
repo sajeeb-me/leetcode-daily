@@ -1,0 +1,33 @@
+problem: 
+
+solution:
+//approach 1
+class Solution {
+public:
+    int maximum69Number (int num) {
+        string str = to_string(num);
+        for(int i=0; i<str.size(); i++){
+            if(str[i] == '6') {
+                str[i] = '9';
+                break;
+            }
+        }
+        return stoi(str);
+    }
+};
+
+
+// approach 2 : (recommended)
+class Solution {
+public:
+    int maximum69Number (int num) {
+        int index = -1, countDig = 0, temp = num;
+        while(temp > 0){
+            if(temp % 10 == 6) index = countDig;
+            countDig++;
+            temp /= 10;
+        }
+        if(index == -1) return num;
+        return num + (3 * pow(10, index));
+    }
+};
