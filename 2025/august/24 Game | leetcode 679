@@ -1,0 +1,47 @@
+problem: https://leetcode.com/problems/24-game/description/?envType=daily-question&envId=2025-08-18
+
+solution: 
+class Solution {
+    const double epsilon = 1e-6;
+private:
+    vector<double> calc(double n1, double n2){
+        vector<double> values;
+        values.push_back(n1 + n2);
+        values.push_back(n1 * n2);
+        values.push_back(n1 - n2);
+        values.push_back(n2 - n1);
+        if(n2 != 0) values.push_back(n1 / n2);
+        if(n1 != 0) values.push_back(n2 / n1);
+        return values;
+    }
+
+    bool helper(vector<double>& nums){
+        if(nums.size() == 1) return fabs(nums[0] - 24.0) <= epsilon;
+
+        for(int i=0; i<nums.size(); i++){
+            for(int j=0; j<nums.size(); j++){
+                if(i == j) continue;
+
+                vector<double>arr;
+                for(int k=0; k<nums.size(); k++){
+                    if(k != i && k != j) arr.push_back(nums[k]);
+                }
+
+                for(double it : calc(nums[i], nums[j])){
+                    arr.push_back(it);
+                    if(helper(arr)) return true;
+                    arr.pop_back();
+                }
+            }
+        }
+
+        return false;
+    }
+
+public:
+    bool judgePoint24(vector<int>& cards) {
+        vector<double> nums;
+        for(int num : cards) nums.push_back((double)num);
+        return helper(nums);
+    }
+};
