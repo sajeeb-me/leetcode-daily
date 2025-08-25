@@ -1,0 +1,66 @@
+Problem: https://leetcode.com/problems/diagonal-traverse/description/?envType=daily-question&envId=2025-08-25
+
+Solution: 
+
+// Solution : 1
+class Solution {
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& mat) {
+        int r = mat.size(), c = mat[0].size();
+        vector<int> res;
+        int i = 0, j = 0;
+        bool upward = true;
+
+        while(res.size() < r*c){
+            res.push_back(mat[i][j]);
+
+            if(upward){
+                if(j == c-1){
+                    i++; upward = false;
+                } else if (i == 0){
+                    j++; upward = false;
+                } else {
+                    i--; j++;
+                }
+            } else{
+                if(i == r-1){
+                    j++; upward = true;
+                } else if(j == 0){
+                    i++; upward = true;
+                } else {
+                    i++; j--;
+                }
+            }
+        }
+
+        return res;
+    }
+};
+
+
+
+// Solution : 2
+class Solution {
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& mat) {
+        int m = mat.size(), n = mat[0].size(), k = 0;
+        vector<int> res(m*n);
+
+        for(int i=0; i< m+n-1; i++){
+            vector<int> temp;
+            int r = i < n ? 0 : i-n+1;
+            int c = i < n ? i : n-1;
+
+            while(r < m && c > -1){
+                temp.push_back(mat[r][c]);
+                r++; c--;
+            }
+
+            if(i%2 == 0) reverse(temp.begin(), temp.end());
+
+            for(int i=0; i<temp.size(); i++) res[k++] = temp[i];
+        }
+
+        return res;
+    }
+};
