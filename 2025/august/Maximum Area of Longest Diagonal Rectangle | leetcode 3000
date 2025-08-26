@@ -1,0 +1,18 @@
+problem: https://leetcode.com/problems/maximum-area-of-longest-diagonal-rectangle/description/?envType=daily-question&envId=2025-08-26
+
+solution:
+class Solution {
+public:
+    int areaOfMaxDiagonal(vector<vector<int>>& dimensions) {
+        int res = 0, maxDiag = 0;
+        for(const auto& rect : dimensions){
+            int diagSq = rect[0]*rect[0] + rect[1]*rect[1];
+            int area = rect[0]*rect[1];
+            if(diagSq > maxDiag || (diagSq == maxDiag && area > res)) {
+                maxDiag = diagSq;
+                res = area;
+            }
+        }
+        return res;
+    }
+};
