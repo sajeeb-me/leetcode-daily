@@ -1,0 +1,76 @@
+Problem: https://leetcode.com/problems/sort-matrix-by-diagonals/description/?envType=daily-question&envId=2025-08-28
+
+Solution:
+// Approach: 1
+class Solution {
+public:
+    vector<vector<int>> sortMatrix(vector<vector<int>>& grid) {
+        int n = grid.size();
+
+        for(int i = 1; i<n; i++) {
+            int r = 0, c = i;
+            vector<int> arr;
+            while(c < n){
+                arr.push_back(grid[r][c]);
+                r++; c++;
+            }
+            r = 0, c = i;
+            sort(arr.begin(), arr.end());
+            for(int n : arr) {
+                grid[r][c] = n;
+                r++; c++;
+            }
+        }
+
+        for(int i=0; i<n; i++){
+            int c = 0, r = i;
+            vector<int> arr;
+            while(r < n){
+                arr.push_back(grid[r][c]);
+                r++; c++;
+            }
+            c = 0, r = i;
+            sort(arr.begin(), arr.end(), greater<int>());
+            for(int n : arr) {
+                grid[r][c] = n;
+                r++; c++;
+            }
+        }
+
+        return grid;
+    }
+};
+
+// Approach: 2
+class Solution {
+public:
+    vector<vector<int>> sortMatrix(vector<vector<int>>& grid) {
+        int n = grid.size();
+        unordered_map<int, priority_queue<int> > decreasing;
+        unordered_map<int, priority_queue<int, vector<int>, greater<int>> > increasing;
+
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                int key = i-j;
+                if(key < 0) increasing[key].push(grid[i][j]);
+                else decreasing[key].push(grid[i][j]);
+            }
+        }
+
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                int key = i-j;
+                if(key < 0) {
+                    grid[i][j] = increasing[key].top();
+                    increasing[key].pop();
+                }
+                else {
+                    grid[i][j] = decreasing[key].top();
+                    decreasing[key].pop();
+                }
+            }
+        }
+
+        return grid;
+    }
+};
