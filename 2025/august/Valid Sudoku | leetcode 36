@@ -1,0 +1,49 @@
+Problem: https://leetcode.com/problems/valid-sudoku/description/?envType=daily-question&envId=2025-08-30
+
+Solution:
+// Approach 1:
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        int n = 9;
+        vector<unordered_set<char>> findInSubBox(n);
+
+        for(int r=0; r<n; r++){
+            unordered_set<char> findInRow(n), findInCol(n);
+            for(int c=0; c<n; c++){
+                int idx = (r/3)*3 + (c/3);
+
+                if(board[r][c] != '.')
+                    if(findInRow.count(board[r][c]) || findInSubBox[idx].count(board[r][c])) 
+                        return false;
+                
+                if(board[c][r] != '.' && findInCol.count(board[c][r])) return false;
+
+                findInRow.insert(board[r][c]);
+                findInCol.insert(board[c][r]);
+                findInSubBox[idx].insert(board[r][c]);
+            }
+        }
+        return true;
+    }
+};
+
+// Approach 2:
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        int findRow[9][9] = {0}, findCol[9][9] = {0}, findSubBox[9][9] = {0};
+        for(int i=0; i<9; i++){
+            for(int j=0; j<9; j++){
+                if(board[i][j] != '.'){
+                    int idx = board[i][j] - '0' - 1;
+                    int subBox = (i/3)*3 + (j/3);
+                    
+                    if(findRow[i][idx] || findCol[j][idx] || findSubBox[subBox][idx]) return false;
+                    findRow[i][idx] = findCol[j][idx] = findSubBox[subBox][idx] = 1;
+                }
+            }
+        }
+        return true;
+    }
+};
