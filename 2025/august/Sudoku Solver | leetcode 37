@@ -1,0 +1,38 @@
+Problem: https://leetcode.com/problems/sudoku-solver/description/?envType=daily-question&envId=2025-08-31
+
+Solution:
+class Solution {
+private:
+    bool isValid(vector<vector<char>>& board, int r, int c, int ch){
+        for(int j=0; j<9; j++) if(board[r][j] == ch) return false;
+        for(int i=0; i<9; i++) if(board[i][c] == ch) return false;
+
+        int row = (r/3)*3, col = (c/3)*3;
+        for(int i=row; i<row+3; i++){
+            for(int j=col; j<col+3; j++){
+                if(board[i][j] == ch) return false;
+            }
+        }
+        return true;
+    }
+
+    bool helper(vector<vector<char>>& board, int r, int c){
+        if(r == 9) return true;
+        if(c == 9) return helper(board, r+1, 0);
+        if(board[r][c] != '.') return helper(board, r, c+1);
+
+        for(int ch='1'; ch <= '9'; ch++){
+            if(isValid(board, r, c, ch)){
+                board[r][c] = ch;
+                if(helper(board, r, c+1)) return true;
+                board[r][c] = '.';
+            }
+        }
+        return false;
+    }
+
+public:
+    void solveSudoku(vector<vector<char>>& board) {
+        helper(board, 0, 0);
+    }
+};
