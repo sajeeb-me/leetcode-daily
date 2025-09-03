@@ -1,0 +1,26 @@
+Problem: https://leetcode.com/problems/find-the-number-of-ways-to-place-people-ii/?envType=daily-question&envId=2025-09-03
+
+Solution:
+class Solution {
+private:
+    static bool des(vector<int>& a, vector<int>& b) {
+        return (a[0] == b[0] ? a[1] < b[1] : a[0] > b[0]);
+    }
+    
+public:
+    int numberOfPairs(vector<vector<int>>& points) {
+        sort(points.begin(), points.end(), des);
+        int ans = 0;
+        for(int i=0; i<points.size()-1; i++){
+            int check = INT_MAX;
+            for(int j=i+1; j<points.size(); j++){
+                if(points[j][1] >= points[i][1] && check > points[j][1]){
+                    ans++;
+                    check = points[j][1];
+                }
+            }
+        }
+
+        return ans;
+    }
+};
