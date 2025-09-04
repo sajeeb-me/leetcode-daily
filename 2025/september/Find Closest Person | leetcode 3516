@@ -1,0 +1,13 @@
+Problem: https://leetcode.com/problems/find-closest-person/description/?envType=daily-question&envId=2025-09-04
+
+Solution:
+class Solution {
+public:
+    int findClosest(int x, int y, int z) {
+        int pOne = abs(x - z);
+        int pTwo = abs(y - z);
+
+        if(pOne == pTwo) return 0;
+        return pOne < pTwo ? 1 : 2;
+    }
+};
