@@ -1,0 +1,15 @@
+Problem: https://leetcode.com/problems/minimum-operations-to-make-the-integer-zero/description/?envType=daily-question&envId=2025-09-05
+
+Solution:
+class Solution {
+public:
+    int makeTheIntegerZero(int num1, int num2) {
+        for(int i=0; i<=60; i++){
+            long long tmp = (long long) num1 - (long long) i*num2;
+            bitset<64> bits(tmp);
+
+            if(tmp >= 0 && bits.count() <= i && i <= tmp) return i;
+        }
+        return -1;
+    }
+};
