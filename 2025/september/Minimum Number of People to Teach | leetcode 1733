@@ -1,0 +1,40 @@
+Problem: https://leetcode.com/problems/minimum-number-of-people-to-teach/submissions/1766173082/?envType=daily-question&envId=2025-09-10
+
+Solution:
+class Solution {
+public:
+    int minimumTeachings(int n, vector<vector<int>>& languages, vector<vector<int>>& friendships) {
+        unordered_set<int> usersCantComunicate;
+
+        for(auto& friends : friendships){
+            int u = friends[0] - 1;
+            int v = friends[1] - 1;
+            unordered_set<int> langSet(languages[u].begin(), languages[u].end());
+            bool canTalk = false;
+
+            for(int lang : languages[v]){
+                if(langSet.count(lang)){
+                    canTalk = true;
+                    break;
+                }
+            }
+
+            if(!canTalk){
+                usersCantComunicate.insert(u);
+                usersCantComunicate.insert(v);
+            }
+        }
+
+        vector<int> language(n+1, 0);
+        int mostKnowing = 0;
+
+        for(int user : usersCantComunicate){
+            for(int lang : languages[user]){
+                language[lang]++;
+                mostKnowing = max(mostKnowing, language[lang]);
+            }
+        }
+
+        return usersCantComunicate.size() - mostKnowing;
+    }
+};
