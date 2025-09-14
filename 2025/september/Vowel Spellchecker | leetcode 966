@@ -1,0 +1,40 @@
+problem: https://leetcode.com/problems/vowel-spellchecker/description/?envType=daily-question&envId=2025-09-14
+
+solution:
+class Solution {
+private:
+    string toLow(string str){
+        for(char& ch : str) ch = tolower(ch);
+        return str;
+    }
+
+    string todev(string str){
+        str = toLow(str);
+        for(char& ch : str){
+            if(ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u') ch = '#';
+        }
+        return str;
+    }
+
+public:
+    vector<string> spellchecker(vector<string>& wordlist, vector<string>& queries) {
+        unordered_set<string> words(wordlist.begin(), wordlist.end());
+        unordered_map<string, string> cap, vowel;
+
+        for(string str : wordlist){
+            string lowerStr = toLow(str), checkVowel = todev(str);
+            cap.insert({lowerStr, str});
+            vowel.insert({checkVowel, str});
+        }
+
+        for(int i=0; i<queries.size(); i++){
+            if(words.count(queries[i])) continue;
+            string lowerStr = toLow(queries[i]), checkVowel = todev(queries[i]);
+            if(cap.count(lowerStr)) queries[i] = cap[lowerStr];
+            else if(vowel.count(checkVowel)) queries[i] = vowel[checkVowel];
+            else queries[i] = "";
+        }
+
+        return queries;
+    }
+};
