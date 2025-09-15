@@ -1,0 +1,29 @@
+problem: https://leetcode.com/problems/maximum-number-of-words-you-can-type/description/?envType=daily-question&envId=2025-09-15
+
+solution:
+class Solution {
+public:
+    int canBeTypedWords(string text, string brokenLetters) {
+        unordered_set<char> brokenChars;
+        int count = 0;
+
+        for(auto& ch : brokenLetters) brokenChars.insert(ch);
+
+        stringstream ss(text);
+        string word;
+        vector<string> words;
+
+        while(ss >> word) words.push_back(word);
+
+        for(auto& it : words){
+            for(auto& ch : it){
+                if(brokenChars.find(ch) != brokenChars.end()){
+                    count++;
+                    break;
+                }
+            }
+        }
+
+        return words.size() - count;
+    }
+};
