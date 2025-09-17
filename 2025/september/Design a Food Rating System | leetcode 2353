@@ -1,0 +1,36 @@
+problem: https://leetcode.com/problems/design-a-food-rating-system/description/?envType=daily-question&envId=2025-09-17
+
+solution:
+class FoodRatings {
+private:
+    unordered_map<string, set<pair<int, string>>> allCuisineRatings;
+    unordered_map<string, string> allCuisines;
+    unordered_map<string, int> allRatings;
+
+public:
+    FoodRatings(vector<string>& foods, vector<string>& cuisines, vector<int>& ratings) {
+        for(int i=0; i<foods.size(); i++){
+            allCuisineRatings[cuisines[i]].insert({-ratings[i], foods[i]});
+            allCuisines[foods[i]] = cuisines[i];
+            allRatings[foods[i]] = ratings[i];
+        }
+    }
+    
+    void changeRating(string food, int newRating) {
+        auto& cuisine = allCuisines.find(food)->second;
+        allCuisineRatings[cuisine].erase({-allRatings[food], food});
+        allCuisineRatings[cuisine].insert({-newRating, food});
+        allRatings[food] = newRating;
+    }
+    
+    string highestRated(string cuisine) {
+        return begin(allCuisineRatings[cuisine])->second;
+    }
+};
+
+/**
+ * Your FoodRatings object will be instantiated and called as such:
+ * FoodRatings* obj = new FoodRatings(foods, cuisines, ratings);
+ * obj->changeRating(food,newRating);
+ * string param_2 = obj->highestRated(cuisine);
+ */
