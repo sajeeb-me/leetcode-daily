@@ -1,0 +1,58 @@
+problem: https://leetcode.com/problems/design-task-manager/?envType=daily-question&envId=2025-09-18
+
+solution:
+class TaskManager {
+private:
+    priority_queue<pair<int, int>> allTasks;
+    unordered_map<int, int> taskPriority;
+    unordered_map<int, int> taskOwner;
+
+public:
+    TaskManager(vector<vector<int>>& tasks) {
+        for(auto& task : tasks){
+            int userId = task[0], taskId = task[1], priority = task[2];
+            add(userId, taskId, priority);
+        }
+        // for(auto& task : tasks){
+        //     int userId = task[0], taskId = task[1], priority = task[2];
+        //     allTasks.push({priority, taskId});
+        //     taskPriority[taskId] = priority;
+        //     taskOwner[taskId] = userId;
+        // }
+    }
+    
+    void add(int userId, int taskId, int priority) {
+        allTasks.push({priority, taskId});
+        taskPriority[taskId] = priority;
+        taskOwner[taskId] = userId;
+    }
+    
+    void edit(int taskId, int newPriority) {
+        allTasks.push({newPriority, taskId});
+        taskPriority[taskId] = newPriority;
+    }
+    
+    void rmv(int taskId) {
+        taskPriority[taskId] = -1;
+    }
+    
+    int execTop() {
+        while(allTasks.size()){
+            auto topTask = allTasks.top(); allTasks.pop();
+            if(topTask.first == taskPriority[topTask.second]){
+                taskPriority[topTask.second] = -1;
+                return taskOwner[topTask.second];
+            }
+        }
+        return -1;
+    }
+};
+
+/**
+ * Your TaskManager object will be instantiated and called as such:
+ * TaskManager* obj = new TaskManager(tasks);
+ * obj->add(userId,taskId,priority);
+ * obj->edit(taskId,newPriority);
+ * obj->rmv(taskId);
+ * int param_4 = obj->execTop();
+ */
