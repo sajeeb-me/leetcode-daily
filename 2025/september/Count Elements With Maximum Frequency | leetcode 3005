@@ -1,0 +1,21 @@
+problem: https://leetcode.com/problems/count-elements-with-maximum-frequency/description/?envType=daily-question&envId=2025-09-22
+
+solution:
+class Solution {
+public:
+    int maxFrequencyElements(vector<int>& nums) {
+        vector<int> freq(101, 0);
+        int max = 0, cnt = 0;
+
+        for(int n : nums){
+            freq[n]++;
+            if(freq[n] > max){
+                cnt = 0;
+                max = freq[n];
+            }
+            if(max == freq[n]) cnt += freq[n];
+            cout << cnt << " ";
+        }
+        return cnt;
+    }
+};
