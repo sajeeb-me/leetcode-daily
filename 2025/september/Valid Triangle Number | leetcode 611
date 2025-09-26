@@ -1,0 +1,41 @@
+problem: https://leetcode.com/problems/valid-triangle-number/description/?envType=daily-question&envId=2025-09-26
+
+solution:
+// optimised solution;
+class Solution {
+public:
+    int triangleNumber(vector<int>& nums) {
+        int n = nums.size(), count = 0;
+        sort(nums.begin(), nums.end());
+
+        for(int i=n-1; i>1; i--){
+            int l=0, r=i-1;
+            while(l < r){
+                if(nums[l]+nums[r] > nums[i]){
+                    count += (r-l);
+                    r--;
+                } else l++;
+            }
+        }
+        return count;
+    }
+};
+
+// brute force
+class Solution {
+public:
+    int triangleNumber(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size(), count = 0;
+
+        for(int i=0; i<n-2; i++){
+            for(int j=i+1; j<n-1; j++){
+                for(int k=j+1; k<n; k++){
+                    if(nums[i] + nums[j] > nums[k]) count++;
+                }
+            }
+        }
+
+        return count;
+    }
+};
