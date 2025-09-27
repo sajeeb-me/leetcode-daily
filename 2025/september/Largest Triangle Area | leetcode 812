@@ -1,0 +1,25 @@
+problem: https://leetcode.com/problems/largest-triangle-area/?envType=daily-question&envId=2025-09-27
+
+solution:
+// (x1, y1), (x2, y2), (x3, y3)
+// area of triangle : 0.5 * | x1 * (y2-y3) + x2 * (y3-y1) + x3 * (y1 - y2) |
+class Solution {
+public:
+    double largestTriangleArea(vector<vector<int>>& points) {
+        int n = points.size();
+        double res;
+
+        for(auto& a : points){
+            for(auto& b : points){
+                for(auto& c : points){
+                    int x1 = a[0], x2 = b[0], x3 = c[0];
+                    int y1 = a[1], y2 = b[1], y3 = c[1];
+                    double temp = 0.5 * abs((x1 * (y2-y3)) + (x2 * (y3-y1)) + (x3 * (y1 - y2)));
+                    res = max(res, temp);
+                }
+            }
+        }
+
+        return res;
+    }
+};
