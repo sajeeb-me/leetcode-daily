@@ -1,0 +1,20 @@
+problem: https://leetcode.com/problems/water-bottles-ii/description/?envType=daily-question&envId=2025-10-02
+
+solution:
+class Solution {
+public:
+    int maxBottlesDrunk(int numBottles, int numExchange) {
+        int emptyBottles = numBottles, res = numBottles;
+        while(numBottles > 0){
+            numBottles = 0;
+            while(emptyBottles >= numExchange){
+                emptyBottles -= numExchange;
+                numExchange++;
+                numBottles++;
+            }
+            res += numBottles;
+            emptyBottles += numBottles;
+        }
+        return res;
+    }
+};
