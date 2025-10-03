@@ -1,0 +1,43 @@
+problem: https://leetcode.com/problems/trapping-rain-water-ii/description/?envType=daily-question&envId=2025-10-03
+
+solution:
+class Solution {
+public:
+    int trapRainWater(vector<vector<int>>& heightMap) {
+        int res = 0;
+        int m = heightMap.size(), n = heightMap[0].size();
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        vector<vector<int>> dirr = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+        auto comp = [&](const array<int, 3>& a, const array<int, 3>& b) { return a[0] >= b[0];};
+        priority_queue<array<int, 3>, vector<array<int, 3>>, decltype(comp)> min_heap(comp);
+
+        for(int i=0; i<n; i++){
+            min_heap.push({heightMap[0][i], 0, i}),
+            min_heap.push({heightMap[m-1][i], m-1, i});
+            visited[0][i] = true, visited[m-1][i] = true;
+        }
+        for(int i=0; i<m; i++){
+            min_heap.push({heightMap[i][0], i, 0}),
+            min_heap.push({heightMap[i][n-1], i, n-1});
+            visited[i][0] = true, visited[i][n-1] = true;
+        }
+
+        while(!min_heap.empty()){
+            auto[height, row, col] = min_heap.top(); min_heap.pop();
+
+            for(auto dir : dirr){
+                int r = row + dir[0], c = col + dir[1];
+                if(r >= 0 && r < m && c >= 0 && c < n && !visited[r][c]){
+                    visited[r][c] = true;
+                    if(heightMap[r][c] < height){
+                        res += height - heightMap[r][c];
+                    }
+                    min_heap.push({max(height, heightMap[r][c]), r, c});
+                }
+            }
+        }
+
+        return res;
+    }
+};
