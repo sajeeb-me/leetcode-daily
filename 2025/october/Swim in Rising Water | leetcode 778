@@ -1,0 +1,31 @@
+problem: https://leetcode.com/problems/swim-in-rising-water/description/?envType=daily-question&envId=2025-10-06
+
+solution:
+class Solution {
+public:
+    int swimInWater(vector<vector<int>>& grid) {
+        int n = grid.size(), ans = max(grid[0][0], grid[n-1][n-1]);
+        if(n == 1) return grid[0][0];
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>> >pq;
+        vector<vector<bool>>visited(n, vector<bool>(n, false));
+        vector<int> dirs({-1, 0, 1, 0, -1});
+
+        visited[0][0] = true;
+        pq.push({ans, 0, 0});
+
+        while(!pq.empty()){
+            auto curr = pq.top(); pq.pop();
+            ans = max(ans, curr[0]);
+            for(int i=0; i<4; i++){
+                int r = curr[1]+dirs[i], c = curr[2]+dirs[i+1];
+                if(r >= 0 && c >= 0 && r < n && c < n && !visited[r][c]){
+                    if(r == n-1 && c == n-1) return ans;
+                    pq.push({grid[r][c], r, c});
+                    visited[r][c] = true;
+                }
+            }
+        }
+        return -1;
+    }
+};
+
