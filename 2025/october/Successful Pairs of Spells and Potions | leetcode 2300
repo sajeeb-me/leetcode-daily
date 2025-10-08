@@ -1,0 +1,22 @@
+problem: https://leetcode.com/problems/successful-pairs-of-spells-and-potions/description/?envType=daily-question&envId=2025-10-08
+
+solution:
+class Solution {
+public:
+    vector<int> successfulPairs(vector<int>& spells, vector<int>& potions, long long success) {
+        sort(potions.begin(), potions.end());
+        int n = spells.size(), m = potions.size();
+        vector<int> res;
+        for(int spl : spells){
+            int st = 0, end = m-1;
+            while(end > st){
+                int mid = st + (end-st)/2;
+                if(((long long)potions[mid]* spl) >= success) end = mid;
+                else st = mid+1;
+            }
+            if(st == end && ((long long)potions[st]* spl) < success) res.push_back(0);
+            else res.push_back(m-st);
+        }
+        return res;
+    }
+};
