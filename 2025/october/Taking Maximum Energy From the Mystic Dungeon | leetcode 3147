@@ -1,0 +1,18 @@
+problem: https://leetcode.com/problems/taking-maximum-energy-from-the-mystic-dungeon/description/?envType=daily-question&envId=2025-10-10
+
+solution:
+class Solution {
+public:
+    int maximumEnergy(vector<int>& energy, int k) {
+        int n = energy.size(), maxE = INT_MIN;
+        vector<int> dp(energy.begin(), energy.end());
+        for(int i=n-1; i>=0; i--){
+            if(n-i <= k) maxE = max(maxE, dp[i]);
+            else{
+                dp[i] = energy[i] + dp[i+k];
+                maxE = max(maxE, dp[i]);
+            }
+        }
+        return maxE;
+    }
+};
