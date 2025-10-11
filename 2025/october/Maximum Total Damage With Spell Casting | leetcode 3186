@@ -1,0 +1,28 @@
+problem: https://leetcode.com/problems/maximum-total-damage-with-spell-casting/description/?envType=daily-question&envId=2025-10-11
+
+solution:
+class Solution {
+public:
+    long long maximumTotalDamage(vector<int>& power) {
+        unordered_map<int, long long> freq;
+        for (int p : power) freq[p]++;
+        vector<int> spell;
+
+        for (auto& [key, val] : freq) spell.push_back(key);
+
+        sort(spell.begin(), spell.end());
+        int n = spell.size();
+
+        vector<long long> res(n);
+        res[0] = freq[spell[0]] * spell[0];
+
+        for (int i = 1; i < n; i++) {
+            long long temp = freq[spell[i]] * spell[i];
+            int prev = upper_bound(spell.begin(), spell.begin() + i, spell[i] - 3) - spell.begin() - 1;
+            if (prev >= 0) temp += res[prev];
+            res[i] = max(res[i - 1], temp);
+        }
+
+        return res[n - 1];
+    }
+};
