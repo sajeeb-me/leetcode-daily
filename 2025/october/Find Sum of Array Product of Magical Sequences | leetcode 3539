@@ -1,0 +1,70 @@
+problem: https://leetcode.com/problems/find-sum-of-array-product-of-magical-sequences/description/?envType=daily-question&envId=2025-10-12
+
+solution:
+class Solution {
+private:
+    const int MOD = 1e9+7;
+    
+    long modPow(long x, long n) {
+        if (n == 0) return 1;
+        if (n % 2 == 1) return x * modPow(x % MOD, n - 1) % MOD;
+        return modPow(x * x % MOD, n / 2) % MOD;
+    }
+    
+    vector<vector<int>> getComb(int n, int k) {
+        vector<vector<int>> comb(n + 1, vector<int>(k + 1));
+        for (int i = 0; i <= n; ++i)
+            comb[i][0] = 1;
+        for (int i = 1; i <= n; ++i)
+            for (int j = 1; j <= k; ++j)
+                comb[i][j] = comb[i - 1][j] + comb[i - 1][j - 1];
+        return comb;
+    }
+    
+    int popcount(unsigned x) {
+        int count = 0;
+        while (x) {
+            count += x & 1;
+            x >>= 1;
+        }
+        return count;
+    }
+
+    int dp(int m, int k, int i, unsigned carry, const vector<int>& nums,
+            vector<vector<vector<vector<int>>>>& mem,
+            const vector<vector<int>>& comb) {
+
+        if (m < 0 || k < 0 || (m + popcount(carry) < k)) return 0;
+        
+        if (m == 0) return k == popcount(carry) ? 1 : 0;
+        
+        if (i == nums.size()) return 0;
+        
+        if (mem[m][k][i][carry] != -1) return mem[m][k][i][carry];
+        
+        int res = 0;
+        
+        for (int count = 0; count <= m; ++count) {
+            long contribution = (long)comb[m][count] * modPow(nums[i], count) % MOD;
+            
+            int newCarry = carry + count;
+            int newK = k - (newCarry % 2);
+            
+            res = (res + (long)dp(m - count, newK, i + 1, newCarry / 2, nums, mem, comb) * contribution) % MOD;
+        }
+        
+        return mem[m][k][i][carry] = res;
+    }
+    
+public:
+    int magicalSum(int m, int k, vector<int>& nums) {
+        const vector<vector<int>> comb = getComb(m, m);
+        
+        vector<vector<vector<vector<int>>>> mem(
+            m + 1, vector<vector<vector<int>>>(
+                k + 1, vector<vector<int>>(nums.size() + 1,
+                    vector<int>(m + 1, -1))));
+        
+        return dp(m, k, 0, 0, nums, mem, comb);
+    }
+};
