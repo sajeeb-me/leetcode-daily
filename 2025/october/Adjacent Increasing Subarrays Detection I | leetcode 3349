@@ -1,0 +1,24 @@
+tutorial: https://youtu.be/dfJypSuOgCY
+
+problem: https://leetcode.com/problems/adjacent-increasing-subarrays-detection-i/description/?envType=daily-question&envId=2025-10-14
+
+solution:
+class Solution {
+public:
+    bool hasIncreasingSubarrays(vector<int>& nums, int k) {
+        int st = 0;
+        bool isIncr = true;
+        for(int i=k*2-1; i<nums.size(); i++){
+            for(int j=st+1; j<st+k; j++){
+                if(nums[j] <= nums[j-1]) isIncr = false;
+            }
+            for(int j=st+k+1; j<=i; j++){
+                if(nums[j] <= nums[j-1]) isIncr = false;
+            }
+            if(isIncr) return true;
+            isIncr = true;
+            st++;
+        }
+        return false;
+    }
+};
