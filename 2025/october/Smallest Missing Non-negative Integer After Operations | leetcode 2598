@@ -1,0 +1,19 @@
+problem: https://leetcode.com/problems/smallest-missing-non-negative-integer-after-operations/description/?envType=daily-question&envId=2025-10-16
+
+solution: 
+
+class Solution {
+public:
+    int findSmallestInteger(vector<int>& nums, int value) {
+        int n = nums.size(), res = 0, x;
+        vector<int> reminder(value, 0);
+        for(int i=0; i<n; i++){
+            x = ((nums[i] % value) + value) % value;
+            reminder[x]++;
+        }
+
+        while(reminder[res % value]--) res++;
+        return res;
+    }
+};
+
