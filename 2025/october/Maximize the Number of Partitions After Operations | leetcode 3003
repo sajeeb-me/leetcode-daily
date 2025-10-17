@@ -1,0 +1,54 @@
+problem: https://leetcode.com/problems/maximize-the-number-of-partitions-after-operations/description/?envType=daily-question&envId=2025-10-17
+
+solution:
+class Solution {
+private:
+    unordered_map<long long, int> memo;
+    
+    int countBits(int mask) {
+        int count = 0;
+        while (mask) {
+            count += mask & 1;
+            mask >>= 1;
+        }
+        return count;
+    }
+    
+    int getRes(const string& s, int i, bool nextCanChange, int mask, int newBit, int k) {
+        int newMask = mask | newBit;
+        
+        if (countBits(newMask) > k) 
+            return 1 + dfs(s, i + 1, nextCanChange, newBit, k);
+        
+        return dfs(s, i + 1, nextCanChange, newMask, k);
+    }
+    
+    int dfs(const string& s, int i, bool canChange, int mask, int k) {
+        if (i == s.length()) return 0;
+        
+        long long key = ((long long)i << 27) | 
+                        ((long long)(canChange ? 1 : 0) << 26) | 
+                        (long long)mask;
+        
+        if (memo.find(key) != memo.end()) return memo[key];
+        
+        int currentBit = 1 << (s[i] - 'a');
+        int res = getRes(s, i, canChange, mask, currentBit, k);
+        
+        if (canChange) {
+            for (int j = 0; j < 26; j++) {
+                int newBit = 1 << j;
+                res = max(res, getRes(s, i, false, mask, newBit, k));
+            }
+        }
+        
+        memo[key] = res;
+        return res;
+    }
+    
+public:
+    int maxPartitionsAfterOperations(string s, int k) {
+        memo.clear();
+        return dfs(s, 0, true, 0, k) + 1;
+    }
+};
