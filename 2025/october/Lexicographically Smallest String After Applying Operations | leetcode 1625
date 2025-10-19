@@ -1,0 +1,38 @@
+Explanation: https://youtu.be/psV2AVORJaQ
+
+problem: https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/description/?envType=daily-question&envId=2025-10-19
+
+solution:
+class Solution {
+private:
+    unordered_set<string> visited;
+    queue<string> q;
+
+    void isVisited(string str){
+        if(!visited.count(str)){
+            visited.insert(str);
+            q.push(str);
+        }
+    }
+
+public:
+    string findLexSmallestString(string s, int a, int b) {
+        string smallest = s;
+
+        visited.insert(s), q.push(s);
+        while(!q.empty()){
+            string str = q.front(); q.pop();
+            smallest = min(smallest, str);
+
+            string addedStr = str;
+            for(int i=1; i<addedStr.size(); i+=2)
+                addedStr[i] = '0' + ((addedStr[i] - '0' + a) % 10);
+            isVisited(addedStr);
+
+            string rotatedStr = str.substr(str.size() - b) + str.substr(0, str.size() - b);
+            isVisited(rotatedStr);
+
+        }
+        return smallest;
+    }
+};
