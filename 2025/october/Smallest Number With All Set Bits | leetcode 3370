@@ -1,0 +1,17 @@
+problem: https://leetcode.com/problems/smallest-number-with-all-set-bits/description/?envType=daily-question&envId=2025-10-29
+
+solution:
+class Solution {
+public:
+    int smallestNumber(int n) {
+        int dig = 0, temp = n;
+        while(temp){
+            dig++;
+            temp >>= 1;
+        }
+
+        int res = (1 << dig) - 1;
+        if(res < n) res = (1 << (dig+1)) -1;
+        return res;
+    }
+};
