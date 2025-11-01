@@ -1,0 +1,25 @@
+problem: https://leetcode.com/problems/delete-nodes-from-linked-list-present-in-array/description/?envType=daily-question&envId=2025-11-01
+
+solution:
+class Solution {
+public:
+    ListNode* modifiedList(vector<int>& nums, ListNode* head) {
+        int maxNum = 0;
+        for(int n : nums) maxNum = max(maxNum, n);
+
+        vector<bool> freq(maxNum+1, false);
+        for(int n : nums) freq[n] = true;
+
+        ListNode* node = new ListNode();
+        ListNode* curr = node;
+        while(head){
+            if(head->val >= freq.size() || !freq[head->val]){
+                curr->next = head;
+                curr = curr->next;
+            }
+            head = head->next;
+        }
+        curr->next = NULL;
+        return node->next;
+    }
+};
