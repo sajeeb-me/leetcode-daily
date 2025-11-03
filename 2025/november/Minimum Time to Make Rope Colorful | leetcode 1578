@@ -1,0 +1,38 @@
+problem: https://leetcode.com/problems/minimum-time-to-make-rope-colorful/description/?envType=daily-question&envId=2025-11-03
+
+solution:
+// Approach 1: 
+class Solution {
+public:
+    int minCost(string colors, vector<int>& neededTime) {
+        int res = 0, currTime = neededTime[0];
+        char currClr = colors[0];
+        for(int i=1; i<colors.size(); i++){
+            int sum = currTime, maxNum = currTime;
+            while(colors[i] == currClr){
+                sum += neededTime[i];
+                maxNum = max(maxNum, neededTime[i]);
+                i++;
+            }
+            res += (sum - maxNum);
+            currClr = colors[i];
+            currTime = neededTime[i];
+        }
+        return res;
+    }
+};
+
+// Approach 2:
+class Solution {
+public:
+    int minCost(string colors, vector<int>& neededTime) {
+        int res = 0;
+        for(int i=1; i<colors.size(); i++){
+            if(colors[i] == colors[i-1]){
+                res += min(neededTime[i], neededTime[i-1]);
+                neededTime[i] = max(neededTime[i], neededTime[i-1]);
+            }
+        }
+        return res;
+    }
+};
