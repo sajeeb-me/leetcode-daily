@@ -1,0 +1,91 @@
+Explanation: https://youtu.be/l6ZEvRGGguA
+
+problem:https://leetcode.com/problems/find-x-sum-of-all-k-long-subarrays-ii/description/?envType=daily-question&envId=2025-11-05
+
+solution:
+class Solution {
+public:
+    vector<long long> findXSum(vector<int>& nums, int k, int x) {
+        vector<long long> res;
+        unordered_map<int, int> freq;
+        set<pair<long long, int>, greater<pair<long long, int>> > top, bottom;
+        long long currSum = 0;
+
+        for(int i=0; i<nums.size(); i++){
+            int currNum = nums[i];
+            int currFreq = freq[currNum];
+
+            if(currFreq){
+                if(auto it = top.find({currFreq, currNum}); it != top.end()){
+                    top.erase(it);
+                    currSum -= (long long)currFreq*(long long)currNum;
+                } else bottom.erase({currFreq, currNum});
+            }
+
+            freq[currNum] = currFreq+1;
+            top.insert({currFreq+1, currNum});
+            currSum += (long long)(currFreq+1) * (long long)currNum;
+
+            if(top.size() > x){
+                auto it = top.rbegin();
+                currSum -= (it->first * it->second);
+                bottom.insert({it->first, it->second});
+                top.erase(prev(it.base()));
+            }
+
+            if(i >= k){
+                int removeNum = nums[i-k];
+                int currFreq = freq[removeNum];
+
+                if(auto it = top.find({currFreq, removeNum}); it != top.end()){
+                    top.erase(it);
+                    currSum -= (long long)currFreq*(long long)removeNum;
+                } else bottom.erase({currFreq, removeNum});
+
+                if(currFreq > 1) bottom.insert({currFreq-1, removeNum});
+                freq[removeNum]--;
+
+                if(top.size() < x){
+                    if(auto it = bottom.begin(); it != bottom.end()){
+                        currSum += (it->first * it->second);
+                        top.insert({it->first, it->second});
+                        bottom.erase(it);
+                    }
+                }
+            }
+
+            if(i+1 >= k) res.push_back(currSum);
+        }
+        return res;
+    }
+};
+
+
+
+// TLE :
+/*
+class Solution {
+public:
+    vector<long long> findXSum(vector<int>& nums, int k, int x) {
+        vector<long long> res;
+        int n = nums.size(), st = 0;
+
+        for(int end = k-1; end < n; end++){
+            unordered_map<int, int> freq;
+            for(int i=st; i<=end; i++) freq[nums[i]]++;
+
+            priority_queue<pair<long long, long long>> pq;
+            for(auto& [num, count] : freq) pq.push({count, num});
+
+            long long sum = 0;
+            for(int i=0; i<x && pq.size(); i++){
+                auto [count, num] = pq.top(); pq.pop();
+                sum += (count * num);
+            }
+            res.push_back(sum);
+            st++;
+        }
+        return res;
+    }
+};
+*/
