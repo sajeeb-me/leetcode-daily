@@ -1,0 +1,49 @@
+problem: https://leetcode.com/problems/power-grid-maintenance/description/?envType=daily-question&envId=2025-11-06
+
+solution:
+class Solution {
+private:
+    void dfs(int node, unordered_map<int, vector<int>>& adj, int id, vector<int>& parentId, 
+            unordered_map<int, set<int>>& mp, vector<bool>& visited){
+        visited[node] = true;
+        mp[id].insert(node);
+        parentId[node] = id;
+
+        for(int& el : adj[node]){
+            if(!visited[el]){
+                dfs(el, adj, id, parentId, mp, visited);
+            }
+        }
+    }
+
+public:
+    vector<int> processQueries(int c, vector<vector<int>>& connections, vector<vector<int>>& queries) {
+        unordered_map<int, vector<int>> adj;
+        for(auto& edge : connections){
+            adj[edge[0]].push_back(edge[1]);
+            adj[edge[1]].push_back(edge[0]);
+        }
+
+        vector<bool> visited(c+1, false);
+        vector<int> parentId(c+1);
+        unordered_map<int, set<int>> mp;
+
+        for(int i=1; i<=c; i++){
+            if(!visited[i]) dfs(i, adj, i, parentId, mp, visited);
+        }
+
+        vector<int>res;
+        for(auto& query : queries){
+            int type = query[0], node = query[1];
+            
+            int id = parentId[node];
+            if(type == 1){
+                if(mp[id].count(node)) res.push_back(node);
+                else if(!mp[id].empty()) res.push_back(*mp[id].begin());
+                else res.push_back(-1);
+            } 
+            else mp[id].erase(node);
+        }
+        return res;
+    }
+};
