@@ -1,0 +1,40 @@
+problem: https://leetcode.com/problems/maximize-the-minimum-powered-city/description/?envType=daily-question&envId=2025-11-07
+
+solution:
+class Solution {
+private:
+    bool pass(vector<int>& stations, int r, long long mid, int k){
+        int n = stations.size();
+        long long currPower = accumulate(stations.begin(), stations.begin()+r, 0LL);
+        vector<int> additions(n, 0);
+        
+        for(int i=0; i<n; i++){
+            if(i+r < n) currPower += stations[i+r];
+            if(currPower < mid){
+                long long needed = mid - currPower;
+                if(needed > k) return false;
+                additions[min(n-1, i+r)] += needed;
+                currPower = mid;
+                k -= needed;
+            }
+            if(i-r >= 0) currPower -= stations[i-r] + additions[i-r];
+        }
+
+        return true;
+    }
+
+public:
+    long long maxPower(vector<int>& stations, int r, int k) {
+        long long left = 0;
+        long long right = accumulate(stations.begin(), stations.end(), 0LL) + k;
+        long long res = 0;
+        while(left <= right){
+            long long mid = left + (right-left)/2;
+            if(pass(stations, r, mid, k)){
+                res = mid;
+                left = mid+1;
+            } else right = mid-1;
+        }
+        return res;
+    }
+};
