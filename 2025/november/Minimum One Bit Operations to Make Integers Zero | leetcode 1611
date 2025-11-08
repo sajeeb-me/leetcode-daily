@@ -1,0 +1,39 @@
+problem: https://leetcode.com/problems/minimum-one-bit-operations-to-make-integers-zero/?envType=daily-question&envId=2025-11-08
+
+solution:
+// Approach: 1
+class Solution {
+public:
+    int minimumOneBitOperations(int n) {
+        int res;
+        for(res = 0; n>0; n &= n-1){
+            res = -(res + (n ^ (n-1)));
+        }
+        return abs(res);
+    }
+};
+
+// Approach: 2
+class Solution {
+public:
+    int minimumOneBitOperations(int n) {
+        if(n <= 1) return n;
+
+        int bit = 0;
+        while((1<<bit) <= n) bit++;
+        return ((1<<bit) - 1) - minimumOneBitOperations(n - (1<<(bit-1)));
+    }
+};
+
+// Approach: 3
+class Solution {
+public:
+    int minimumOneBitOperations(int n) {
+        int res = 0;
+        while(n > 0){
+            res ^= n;
+            n >>= 1;
+        }
+        return res;
+    }
+};
