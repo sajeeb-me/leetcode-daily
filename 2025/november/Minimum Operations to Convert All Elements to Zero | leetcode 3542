@@ -1,0 +1,20 @@
+problem: https://leetcode.com/problems/minimum-operations-to-convert-all-elements-to-zero/description/?envType=daily-question&envId=2025-11-10
+
+solution:
+class Solution {
+public:
+    int minOperations(vector<int>& nums) {
+        vector<int> stack;
+        int res = 0;
+        for(int n : nums){
+            while(!stack.empty() && stack.back() > n) stack.pop_back();
+
+            if(n == 0) continue;
+            if(stack.empty() || stack.back() < n){
+                res++;
+                stack.push_back(n);
+            }
+        }
+        return res;
+    }
+};
