@@ -1,0 +1,50 @@
+problem: https://leetcode.com/problems/ones-and-zeroes/description/?envType=daily-question&envId=2025-11-11
+
+solution:
+// Approach 1:
+class Solution {
+private:
+    int dp[601][101][101];
+    int helper(vector<pair<int, int>>& onesAndZeros, int idx, int m, int n){
+        if(idx == onesAndZeros.size() || (m==0 && n==0)) return 0;
+        int currZero = onesAndZeros[idx].second, currOne = onesAndZeros[idx].first;
+
+        if(dp[idx][m][n] != -1) return dp[idx][m][n];
+        if(currZero > m || currOne > n) return dp[idx][m][n] = helper(onesAndZeros, idx+1, m, n);
+
+        int take = 1 + helper(onesAndZeros, idx+1, m-currZero, n-currOne);
+        int noTake = helper(onesAndZeros, idx+1, m, n);
+        return dp[idx][m][n] = max(take, noTake);
+    }
+
+public:
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        vector<pair<int, int>> onesAndZeros;
+        memset(dp, -1, sizeof(dp));
+        for(string str : strs){
+            int ones = 0, zeros = 0;
+            for(char ch : str) (ch == '1') ? ones++ : zeros++;
+            onesAndZeros.push_back({ones, zeros});
+        }
+        return helper(onesAndZeros, 0, m, n);
+    }
+};
+
+// Approach 2:
+class Solution {
+public:
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+        for(string str : strs){
+            int ones = count(str.begin(), str.end(), '1');
+            int zeros = str.size() - ones;
+
+            for(int j=n; j>=ones; j--){
+                for(int i=m; i>=zeros; i--){
+                    dp[i][j] = max(dp[i][j], 1+dp[i-zeros][j-ones]);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+};
