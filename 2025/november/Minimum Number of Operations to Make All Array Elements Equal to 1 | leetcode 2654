@@ -1,0 +1,24 @@
+problem: https://leetcode.com/problems/minimum-number-of-operations-to-make-all-array-elements-equal-to-1/description/?envType=daily-question&envId=2025-11-12
+
+solution:
+class Solution {
+public:
+    int minOperations(vector<int>& nums) {
+        int n = nums.size();
+        int cnt = count(nums.begin(), nums.end(), 1);
+        if(cnt != 0) return n-cnt;
+
+        int res = 1e7;
+        for(int i=0; i<n; i++){
+            int gcd = nums[i];
+            for(int j=i+1; j<n; j++){
+                gcd = __gcd(gcd, nums[j]);
+                if(gcd == 1){
+                    res = min(res, j-i+(n-1));
+                    break;
+                }
+            }
+        }
+        return res == 1e7 ? -1 : res;
+    }
+};
