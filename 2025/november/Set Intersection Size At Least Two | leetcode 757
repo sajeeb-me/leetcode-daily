@@ -1,0 +1,22 @@
+problem: https://leetcode.com/problems/set-intersection-size-at-least-two/description/?envType=daily-question&envId=2025-11-20
+
+solution:
+class Solution {
+public:
+    int intersectionSizeTwo(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end(), [](auto& a, auto& b) {
+            return a[1] < b[1] || (a[1] == b[1] && a[0] > b[0]);
+        });
+
+        int res = 2, low = intervals[0][1]-1, high = intervals[0][1];
+        for(int i=1; i<intervals.size(); i++){
+            int start = intervals[i][0], end = intervals[i][1];
+            if(low >= start && high <= end) continue;
+            res += (high >= start ? 1 : 2);
+
+            low = (high >= start ? high : end-1);
+            high = end;
+        }
+        return res;
+    }
+};
