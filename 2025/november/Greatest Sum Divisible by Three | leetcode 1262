@@ -1,0 +1,17 @@
+problem: https://leetcode.com/problems/greatest-sum-divisible-by-three/description/?envType=daily-question&envId=2025-11-23
+
+solution: 
+class Solution {
+public:
+    int maxSumDivThree(vector<int>& nums) {
+        vector<int> dp(3);
+        for(int num : nums){
+            for(int curr : vector<int>(dp)){
+                int mod = (curr + num) % 3;
+                dp[mod] = max(dp[mod], curr + num);
+            }
+        }
+        return dp[0];
+    }
+};
+
