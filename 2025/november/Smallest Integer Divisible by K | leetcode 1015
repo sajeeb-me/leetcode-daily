@@ -1,0 +1,20 @@
+problem: https://leetcode.com/problems/smallest-integer-divisible-by-k/description/?envType=daily-question&envId=2025-11-25
+
+solution:
+class Solution {
+public:
+    int smallestRepunitDivByK(int k) {
+        if(k%2==0 || k%5==0) return -1;
+        
+        int num = 0;
+        // unordered_set<int> modSet;
+        for(int length = 1; length <= k; length++){
+            num = ((num * 10) + 1) % k;
+            if(num == 0) return length;
+
+            // if(modSet.count(num)) return -1;
+            // modSet.insert(num);
+        }
+        return -1;
+    }
+};
