@@ -1,0 +1,27 @@
+problem: https://leetcode.com/problems/paths-in-matrix-whose-sum-is-divisible-by-k/description/?envType=daily-question&envId=2025-11-26
+
+solution:
+class Solution {
+private:
+    int MOD = 1e9+7;
+    int findPaths(int r, int c, int m, int n, vector<vector<int>>& grid, int sum, 
+        int k, vector<vector<vector<int>>>& dp){
+        if(r >= m || c >= n) return 0;
+
+        sum = (sum + grid[r][c]) % k;
+        if(r==m-1 && c==n-1) return sum == 0;
+        if(dp[r][c][sum] != -1) return dp[r][c][sum];
+
+        int down = findPaths(r+1, c, m, n, grid, sum, k, dp);
+        int right = findPaths(r, c+1, m, n, grid, sum, k, dp);
+        
+        return dp[r][c][sum] = (down + right) % MOD;
+    }
+
+public:
+    int numberOfPaths(vector<vector<int>>& grid, int k) {
+        int m=grid.size(), n=grid[0].size();
+        vector<vector<vector<int>>> dp(m, vector<vector<int>>(n, vector<int> (k, -1)));
+        return findPaths(0, 0, m, n, grid, 0, k, dp);
+    }
+};
