@@ -1,0 +1,26 @@
+problem: https://leetcode.com/problems/make-sum-divisible-by-p/description/?envType=daily-question&envId=2025-11-30
+
+solution:
+class Solution {
+public:
+    int minSubarray(vector<int>& nums, int p) {
+        int n = nums.size();
+        vector<int> pref(n);
+        pref[0] = nums[0];
+        for(int i=1; i<n; i++) pref[i] = (pref[i-1] + nums[i]) % p;
+
+        int rem = pref[n-1];
+        if(rem == 0) return 0;
+
+        int res = n, curr = 0;
+        unordered_map<int, int> mp = {{0, -1}};
+        for(int i=0; i<n; i++){
+            curr = (curr + nums[i]) % p;
+            cout << curr << endl;
+            mp[curr] = i;
+            int want = (curr - rem + p) % p;
+            if(mp.count(want)) res = min(res, i-mp[want]);
+        }
+        return res == n ? -1 : res;
+    }
+};
