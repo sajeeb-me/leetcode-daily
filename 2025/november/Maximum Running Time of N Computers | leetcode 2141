@@ -1,0 +1,17 @@
+problem: https://leetcode.com/problems/maximum-running-time-of-n-computers/description/?envType=daily-question&envId=2025-12-01
+
+solution:
+class Solution {
+public:
+    long long maxRunTime(int n, vector<int>& batteries) {
+        sort(batteries.begin(), batteries.end());
+        long long sum = accumulate(batteries.begin(), batteries.end(), 0LL);
+
+        int idx=0, sz=batteries.size();
+        while(batteries[sz-1-idx] > sum/(n-idx)){
+            sum -= batteries[sz-1-idx];
+            idx++;
+        }
+        return sum / (n-idx);
+    }
+};
