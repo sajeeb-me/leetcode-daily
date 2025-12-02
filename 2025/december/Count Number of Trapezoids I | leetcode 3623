@@ -1,0 +1,19 @@
+problem: https://leetcode.com/problems/count-number-of-trapezoids-i/description/?envType=daily-question&envId=2025-12-02
+
+solution:
+class Solution {
+public:
+    int countTrapezoids(vector<vector<int>>& points) {
+        const int MOD = 1e9+7;
+        unordered_map<int, long long> mp;
+        for(auto p : points) mp[p[1]]++;
+
+        int sum = 0, res = 0;
+        for(auto[num, val] : mp){
+            long long lines = val * (val-1) / 2;
+            res = (res + (sum*lines)) % MOD;
+            sum = (sum + lines) % MOD;
+        }
+        return res;
+    }
+};
