@@ -1,0 +1,42 @@
+problem: https://leetcode.com/problems/count-number-of-trapezoids-ii/description/?envType=daily-question&envId=2025-12-03
+
+solution:
+class Solution {
+private:
+    int count(unordered_map<int, unordered_map<int, int>>& mp){
+        int res = 0;
+        for(auto& [key, innerMap] : mp){
+            int sum = 0;
+            for(auto& [k, val] : innerMap) sum += val;
+            for(auto& [k, val] : innerMap) res += val * (sum -= val);
+        }
+        return res;
+    }
+    
+public:
+    int countTrapezoids(vector<vector<int>>& points) {
+        int n = points.size();
+        unordered_map<int, unordered_map<int, int>> mp1, mp2;
+
+        for(int i=0; i<n; i++){
+            for(int j=i+1; j<n; j++){
+                int dx = points[j][0] - points[i][0];
+                int dy = points[j][1] - points[i][1];
+
+                if(dx<0 || (dx==0 && dy<0)){
+                    dx = -dx;
+                    dy = -dy;
+                }
+
+                int g = gcd(dx, abs(dy));
+                int sx = dx/g, sy = dy/g;
+                int des = sx * points[i][1] - sy * points[i][0];
+                int key1 = (sx << 12) | (sy + 2000), key2 = (dx << 12) | (dy + 2000);
+                
+                mp1[key1][des]++; mp2[key2][des]++;
+            }
+        }
+
+        return count(mp1) - count(mp2) / 2;
+    }
+};
