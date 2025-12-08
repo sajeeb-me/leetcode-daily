@@ -1,0 +1,38 @@
+problem: https://leetcode.com/problems/count-square-sum-triples/description/?envType=daily-question&envId=2025-12-08
+
+solution:
+// Approach: 1
+class Solution {
+public:
+    int countTriples(int n) {
+        int res = 0;
+        for(int i=1; i<n; i++){
+            for(int j=i+1; j<=n; j++){
+                int num = (i*i) + (j*j);
+                int sqrtN = sqrt(num);
+                if(sqrtN*sqrtN == num && sqrtN <= n) res += 2;
+            }
+        }
+        return res;
+    }
+};
+
+
+// Approach: 2
+class Solution {
+public:
+    int countTriples(int n) {
+        int res = 0;
+        for(int c=1; c<=n; c++){
+            int currSqr = c*c;
+            int a = 1, b = c-1;
+            while(a < b){
+                int currSum = (a*a) + (b*b);
+                if(currSum == currSqr) res += 2;
+                if(currSum <= currSqr) a++;
+                if(currSum >= currSqr) b--;
+            }
+        }
+        return res;
+    }
+};
