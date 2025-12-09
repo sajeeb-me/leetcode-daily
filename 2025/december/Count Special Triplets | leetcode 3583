@@ -1,0 +1,22 @@
+problem: https://leetcode.com/problems/count-special-triplets/description/?envType=daily-question&envId=2025-12-09
+
+solution:
+class Solution {
+public:
+    int specialTriplets(vector<int>& nums) {
+        int res = 0, MOD = 1e9+7;
+        unordered_map<int, int>leftCount, rightCount;
+        for(int n : nums) rightCount[n]++;
+
+        for(int i=0; i<nums.size(); i++){
+            int n = nums[i];
+            rightCount[n]--;
+            int leftFreq = leftCount[n*2];
+            int rightFreq = rightCount[n*2];
+            leftCount[n]++;
+
+            res = (res + (1LL * leftFreq * rightFreq) % MOD) % MOD;
+        }
+        return res;
+    }
+};
