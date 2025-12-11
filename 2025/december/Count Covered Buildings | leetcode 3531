@@ -1,0 +1,29 @@
+problem: https://leetcode.com/problems/count-covered-buildings/description/?envType=daily-question&envId=2025-12-11
+
+solution:
+class Solution {
+public:
+    int countCoveredBuildings(int n, vector<vector<int>>& buildings) {
+        unordered_map<int, set<int>> x, y;
+
+        for(auto& it : buildings){
+            x[it[0]].insert(it[1]);
+            y[it[1]].insert(it[0]);
+        }
+
+        int count = 0;
+        for(auto& it : buildings){
+            const int ax = it[0];
+            const int ay = it[1];
+
+            const bool up = ay != *x[ax].rbegin();
+            const bool down = ay != *x[ax].begin();
+            const bool left = ax != *y[ay].begin();
+            const bool right = ax != *y[ay].rbegin();
+
+            if(up && down && left && right) count++;
+        }
+
+        return count;
+    }
+};
