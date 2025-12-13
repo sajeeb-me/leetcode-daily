@@ -1,0 +1,35 @@
+problem: https://leetcode.com/problems/coupon-code-validator/description/?envType=daily-question&envId=2025-12-13
+
+solution:
+class Solution {
+public:
+    vector<string> validateCoupons(vector<string>& code, vector<string>& businessLine, vector<bool>& isActive) {
+        int n = code.size();
+        unordered_map<string, int> businessOrders = { {"electronics", 0}, {"grocery", 1}, {"pharmacy", 2}, {"restaurant", 3} };
+        vector<pair<pair<int, string>, string>> sortableCoupons;
+
+        for(int i=0; i<n; i++){
+            if(!isActive[i] || code[i].empty() || businessOrders.find(businessLine[i]) == businessOrders.end()) continue;
+
+            bool isValid = true;
+            for(char ch : code[i]){
+                if(!(isalnum(ch) || ch == '_')){
+                    isValid = false;
+                    break;
+                }
+            }
+            if(!isValid) continue;
+
+            int sortIdx = businessOrders[businessLine[i]];
+            sortableCoupons.push_back({{sortIdx, code[i]}, code[i]});
+        }
+
+        sort(sortableCoupons.begin(), sortableCoupons.end());
+
+        vector<string>res;
+        for(auto& coupon : sortableCoupons){
+            res.push_back(coupon.second);
+        }
+        return res;
+    }
+};
