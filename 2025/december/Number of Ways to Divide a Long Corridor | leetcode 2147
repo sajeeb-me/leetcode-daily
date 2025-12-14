@@ -1,0 +1,23 @@
+problem: https://leetcode.com/problems/number-of-ways-to-divide-a-long-corridor/description/?envType=daily-question&envId=2025-12-14
+
+solution:
+class Solution {
+public:
+    int numberOfWays(string corridor) {
+        int MOD = 1e9+7;
+        vector<int> seats;
+        for(int i=0; i<corridor.size(); i++){
+            if(corridor[i] == 'S') seats.push_back(i);
+        }
+
+        if(seats.size() == 0 || seats.size() % 2) return 0;
+
+        int res = 1, idx = seats[1];
+        for(int i=2; i<seats.size(); i+=2){
+            int diff = seats[i] - idx;
+            res = (1LL * res * diff) % MOD;
+            idx = seats[i+1];
+        }
+        return res;
+    }
+};
