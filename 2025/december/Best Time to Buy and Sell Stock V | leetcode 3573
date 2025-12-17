@@ -1,0 +1,28 @@
+problem: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-v/description/?envType=daily-question&envId=2025-12-17
+
+solution:
+class Solution {
+public:
+    long long maximumProfit(vector<int>& prices, int k) {
+        int n = prices.size();
+        vector<vector<vector<long long>>> dp(n+1, vector<vector<long long>> (k+1, vector<long long>(3, -1e14)));
+
+        for(int i=0; i<=k; i++) dp[n][i][0] = 0;
+
+        for(int i=n-1; i>=0; i--){
+            for(int j=0; j<=k; j++){
+                dp[i][j][0] = dp[i+1][j][0];
+                dp[i][j][0] = max(dp[i][j][0], dp[i+1][j][1]-prices[i]);
+                dp[i][j][0] = max(dp[i][j][0], dp[i+1][j][2]+prices[i]);
+
+                dp[i][j][1] = dp[i+1][j][1];
+                dp[i][j][2] = dp[i+1][j][2];
+                if(j>0){
+                    dp[i][j][1] = max(dp[i + 1][j][1], dp[i + 1][j - 1][0] + prices[i]);
+                    dp[i][j][2] = max(dp[i + 1][j][2], dp[i + 1][j - 1][0] - prices[i]);
+                }
+            }
+        }
+        return dp[0][k][0];
+    }
+};
