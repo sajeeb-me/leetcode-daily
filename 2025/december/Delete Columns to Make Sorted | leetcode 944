@@ -1,0 +1,19 @@
+problem: https://leetcode.com/problems/delete-columns-to-make-sorted/description/?envType=daily-question&envId=2025-12-20
+
+solution:
+class Solution {
+public:
+    int minDeletionSize(vector<string>& strs) {
+        int idx = 0, length = strs[0].size(), count = 0;
+        while(idx < length){
+            for(int i=1; i<strs.size(); i++){
+                if(strs[i][idx] < strs[i-1][idx]){
+                    count++;
+                    break;
+                }
+            }
+            idx++;
+        }
+        return count;
+    }
+};
