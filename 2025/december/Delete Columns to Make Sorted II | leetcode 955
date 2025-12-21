@@ -1,0 +1,28 @@
+problem: https://leetcode.com/problems/delete-columns-to-make-sorted-ii/description/?envType=daily-question&envId=2025-12-21
+
+solution:
+class Solution {
+public:
+    int minDeletionSize(vector<string>& strs) {
+        int idx = 0, count = 0, n = strs.size();
+        vector<bool> isOkay(n, false);
+        
+        while(idx < strs[0].size()){
+            bool isDeleted = false;
+            for(int i=1; i<n; i++){
+                if(!isOkay[i] && strs[i][idx] < strs[i-1][idx]){
+                    count++;
+                    isDeleted = true;
+                    break;
+                }
+            }
+            if(!isDeleted){
+                for(int i=1; i<n; i++){
+                    isOkay[i] = isOkay[i] || strs[i][idx] > strs[i-1][idx];
+                }
+            }
+            idx++;
+        }
+        return count;
+    }
+};
