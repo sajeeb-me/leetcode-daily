@@ -1,0 +1,15 @@
+problem: https://leetcode.com/problems/maximize-happiness-of-selected-children/description/?envType=daily-question&envId=2025-12-25
+
+solution:
+class Solution {
+public:
+    long long maximumHappinessSum(vector<int>& happiness, int k) {
+        sort(happiness.begin(), happiness.end(), greater<int>());
+        long long res = 0;
+        for(int i=0; i<k; i++){
+            long long val = max(0LL, happiness[i] - (long long)i);
+            res += val;
+        }
+        return res;
+    }
+};
