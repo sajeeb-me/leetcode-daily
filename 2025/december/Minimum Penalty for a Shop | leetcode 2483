@@ -1,0 +1,17 @@
+problem: https://leetcode.com/problems/minimum-penalty-for-a-shop/description/?envType=daily-question&envId=2025-12-26
+
+solution:
+class Solution {
+public:
+    int bestClosingTime(string customers) {
+        int max = 0, score = 0, best_hour = -1;
+        for(int i=0; i<customers.size(); i++){
+            score += (customers[i] == 'Y') ? 1 : -1;
+            if(score > max){
+                max = score;
+                best_hour = i;
+            }
+        }
+        return best_hour + 1;
+    }
+};
