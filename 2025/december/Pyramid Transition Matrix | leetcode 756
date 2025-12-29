@@ -1,0 +1,21 @@
+problem: https://leetcode.com/problems/pyramid-transition-matrix/description/?envType=daily-question&envId=2025-12-29
+
+solution:
+class Solution {
+private:
+    bool helper(string bottom, unordered_map<string, vector<char>>& mp, int start, string nxt){
+        if(bottom.size() == 1) return true;
+        if(start == bottom.size() - 1) return helper(nxt, mp, 0, "");
+
+        for(char ch : mp[bottom.substr(start, 2)])
+        if(helper(bottom, mp, start+1, nxt+ch)) return true;
+        return false;
+    }
+
+public:
+    bool pyramidTransition(string bottom, vector<string>& allowed) {
+        unordered_map<string, vector<char>> mp;
+        for(auto& s:allowed) mp[s.substr(0, 2)].push_back(s.back());
+        return helper(bottom, mp, 0, "");
+    }
+};
