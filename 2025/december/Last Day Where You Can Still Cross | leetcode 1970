@@ -1,0 +1,45 @@
+problem: https://leetcode.com/problems/last-day-where-you-can-still-cross/description/?envType=daily-question&envId=2025-12-31
+
+solution:
+class Solution {
+private:
+    bool helper(vector<vector<int>>& cells, int row, int col, int dayAt) {
+        vector<vector<bool>> grid(row, vector<bool>(col, 0));
+        queue<pair<int, int>> q;
+        vector<int>dirs = {0, 1, 0, -1, 0};
+
+        for (int i = 0; i < dayAt; ++i) grid[cells[i][0]-1][cells[i][1]-1] = 1;
+        for (int c = 0; c < col; ++c) {
+            if (grid[0][c] == 0) {
+                q.push({0, c});
+                grid[0][c] = 1;
+            }
+        }
+        while (!q.empty()) {
+            auto [r, c] = q.front(); q.pop();
+            if (r == row - 1) return true;
+            for (int i = 0; i < 4; ++i) {
+                int x = r + dirs[i], y = c + dirs[i+1];
+                if (x < 0 || x == row || y < 0 || y == col || grid[x][y] == 1) continue;
+                grid[x][y] = 1;
+                q.push({x, y});
+            }
+        }
+        return false;
+    }
+
+public:
+    int latestDayToCross(int row, int col, vector<vector<int>>& cells) {
+        int left = 1, right = cells.size(), ans = 0;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (helper(cells, row, col, mid)) {
+                ans = mid;
+                left = mid + 1;
+            } else right = mid - 1;
+        }
+
+        return ans;
+    }
+};
