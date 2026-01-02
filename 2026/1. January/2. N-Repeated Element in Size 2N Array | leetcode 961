@@ -1,0 +1,42 @@
+problem: https://leetcode.com/problems/n-repeated-element-in-size-2n-array/description/?envType=daily-question&envId=2026-01-02
+
+solution:
+class Solution {
+public:
+    int repeatedNTimes(vector<int>& nums) {
+        for(int i=0; i<nums.size()-2; i++){
+            if(nums[i] == nums[i+1] || nums[i] == nums[i+2])
+                return nums[i];
+        }
+        return nums.back();
+    }
+};
+
+/*
+class Solution {
+public:
+    int repeatedNTimes(vector<int>& nums) {
+        unordered_map<int, int> freq;
+        for(int num : nums){
+            if(freq[num]++ >= 1) return num;
+        }
+        return 0;
+    }
+};
+
+class Solution {
+public:
+    int repeatedNTimes(vector<int>& nums) {
+        int res = 0, currFreq = 0;
+        unordered_map<int, int> freq;
+        for(int num : nums){
+            freq[num]++;
+            if(freq[num] > currFreq){
+                currFreq = freq[num];
+                res = num;
+            }
+        }
+        return res;
+    }
+};
+*/
