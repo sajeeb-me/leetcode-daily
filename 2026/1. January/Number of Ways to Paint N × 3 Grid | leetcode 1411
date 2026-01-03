@@ -1,0 +1,16 @@
+problem: https://leetcode.com/problems/number-of-ways-to-paint-n-3-grid/description/?envType=daily-question&envId=2026-01-03
+
+solution:
+class Solution {
+public:
+    int numOfWays(int n) {
+        long a1 = 6, a2 = 6, b1, b2, MOD = 1e9+7;
+        for (int i = 1; i < n; i++) {
+            b1 = a1 * 3 + a2 * 2;
+            b2 = a1 * 2 + a2 * 2;
+            a1 = b1 % MOD;
+            a2 = b2 % MOD;
+        }
+        return (a1 + a2) % MOD;
+    }
+};
