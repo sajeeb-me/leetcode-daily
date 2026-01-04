@@ -1,0 +1,23 @@
+problem: https://leetcode.com/problems/four-divisors/description/?envType=daily-question&envId=2026-01-04
+
+solution:
+class Solution {
+public:
+    int sumFourDivisors(vector<int>& nums) {
+        int res = 0;
+        for(int num : nums){
+            int curr = 0;
+            for(int i=2; i*i<=num; i++){
+                if(num%i == 0){
+                    if(curr == 0) curr = i;
+                    else {
+                        curr = 0;
+                        break;
+                    }
+                }
+            }
+            if(curr > 0 && curr != num/curr) res += 1 + curr + num/curr + num;
+        }
+        return res;
+    }
+};
