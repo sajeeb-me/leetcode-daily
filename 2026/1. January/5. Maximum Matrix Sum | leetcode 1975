@@ -1,0 +1,20 @@
+problem: https://leetcode.com/problems/maximum-matrix-sum/description/?envType=daily-question&envId=2026-01-05
+
+solution:
+class Solution {
+public:
+    long long maxMatrixSum(vector<vector<int>>& matrix) {
+        long long total = 0;
+        int negNum = 0, minAbs = INT_MAX;
+
+        for (auto& row : matrix) {
+            for (int num : row) {
+                if (num < 0) negNum++;
+                total += abs(num);
+                minAbs = min(minAbs, abs(num));
+            }
+        }
+
+        return (negNum % 2) ? total - 2LL * minAbs : total;
+    }
+};
