@@ -1,0 +1,24 @@
+problem: https://leetcode.com/problems/maximize-area-of-square-hole-in-grid/description/?envType=daily-question&envId=2026-01-15
+
+solution:
+class Solution {
+private:
+    int helper (vector<int>& bars) {
+        int res = 1, stk = 1;
+        for (int i = 1; i < bars.size(); i++) {
+            if (bars[i] - bars[i - 1] == 1) stk++;
+            else stk = 1;
+            res = max(res, stk);
+        }
+        return res+1;
+    };
+
+public:
+    int maximizeSquareHoleArea(int n, int m, vector<int>& hBars, vector<int>& vBars) {
+        sort(hBars.begin(), hBars.end());
+        sort(vBars.begin(), vBars.end());
+
+        int area = min(helper(hBars), helper(vBars));
+        return area * area;
+    }
+};
