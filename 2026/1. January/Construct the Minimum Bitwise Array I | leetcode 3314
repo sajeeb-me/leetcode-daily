@@ -1,0 +1,17 @@
+problem: https://leetcode.com/problems/construct-the-minimum-bitwise-array-i/description/?envType=daily-question&envId=2026-01-20
+
+solution:
+class Solution {
+public:
+    vector<int> minBitwiseArray(vector<int>& nums) {
+        vector<int> res;
+        for (auto& n : nums) {
+            if (n & 1) {
+                auto num = ((n + 1) & ~n) >> 1;
+                res.push_back(n & ~num);
+            } else
+                res.push_back(-1);
+        }
+        return res;
+    }
+};
