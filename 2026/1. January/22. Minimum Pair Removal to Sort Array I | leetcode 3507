@@ -1,0 +1,30 @@
+problem: https://leetcode.com/problems/minimum-pair-removal-to-sort-array-i/description/?envType=daily-question&envId=2026-01-22
+
+solutioin:
+class Solution {
+private:
+    int minPair(vector<int> v){
+        int minSum = 1e9, pos = -1;
+        for(int i = 0; i < v.size()-1; i++){
+            if(v[i] + v[i+1] < minSum){
+                minSum = v[i] + v[i+1];
+                pos = i;
+            }
+        }
+        return pos;
+    }
+    void mergePair(vector<int> &v, int pos){
+        v[pos] += v[pos+1];
+        v.erase(v.begin() + pos + 1);
+    }
+
+public:
+    int minimumPairRemoval(vector<int>& nums) {
+        int res = 0;
+        while(!is_sorted(nums.begin(), nums.end())){
+            mergePair(nums, minPair(nums));
+            res += 1;
+        }
+        return res;
+    }
+};
