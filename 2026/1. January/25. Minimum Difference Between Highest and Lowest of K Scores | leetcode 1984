@@ -1,0 +1,14 @@
+problem: https://leetcode.com/problems/minimum-difference-between-highest-and-lowest-of-k-scores/description/?envType=daily-question&envId=2026-01-25
+
+solution:
+class Solution {
+public:
+    int minimumDifference(vector<int>& nums, int k) {
+        int res = INT_MAX;
+        sort(nums.begin(), nums.end());
+        for(int i=k-1; i<nums.size(); i++){
+            res = min(res, nums[i] - nums[i-k+1]);
+        }
+        return res;
+    }
+};
