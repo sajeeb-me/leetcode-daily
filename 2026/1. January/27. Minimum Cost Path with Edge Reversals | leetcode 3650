@@ -1,0 +1,43 @@
+problem: https://leetcode.com/problems/minimum-cost-path-with-edge-reversals/description/?envType=daily-question&envId=2026-01-27
+
+solution:
+class Solution {
+private:
+    vector<vector<pair<int,int>>> resEdge;
+    
+    int dijkstra(int n){
+        vector<bool> visited(n, false);
+        vector<int> dist(n, 1e9);
+        priority_queue<pair<int,int> > queue;
+        queue.push({0, 0});
+        dist[0] = 0;
+
+        while(!queue.empty()){
+            int u = queue.top().second;
+            queue.pop();
+            if(visited[u]) continue;
+            visited[u] = true;
+            for(auto [v, w] : resEdge[u]){
+                if(dist[u] + w < dist[v]){
+                    dist[v] = dist[u] + w;
+                    queue.push({-dist[v], v});
+                }
+            }
+        }
+        if(dist[n - 1] == 1e9) return -1;
+        return dist[n - 1];
+    }
+
+public:
+    int minCost(int n, vector<vector<int>>& edges) {
+        resEdge.resize(n);
+        for(auto edge : edges){
+            int u = edge[0];
+            int v = edge[1];
+            int w = edge[2];
+            resEdge[u].push_back({v, w});
+            resEdge[v].push_back({u, 2 * w});
+        }
+        return dijkstra(n);
+    }
+};
