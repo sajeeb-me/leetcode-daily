@@ -1,0 +1,17 @@
+problem: https://leetcode.com/problems/minimum-removals-to-balance-array/?envType=daily-question&envId=2026-02-06
+
+solution:
+class Solution {
+public:
+    int minRemoval(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size(), i = 0, mxLen = 0;
+        
+        for (int j = 0; j < n; j++) {
+            while ((long long)nums[j] > (long long)nums[i] * k) i++;
+            mxLen = max(mxLen, j - i + 1);
+        }
+        
+        return n - mxLen;
+    }
+};
