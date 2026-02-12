@@ -1,0 +1,24 @@
+problem: https://leetcode.com/problems/longest-balanced-substring-i/description/?envType=daily-question&envId=2026-02-12
+
+solution:
+class Solution {
+public:
+    int longestBalanced(string s) {
+        int cnt=1, n=s.size();
+        
+        for(int l=0; l<n; l++){
+            vector<int> freq(26, 0);
+            int uniq=0, maxF=0, cntMax=0;
+
+            for(int r=l; r<n; r++){
+                int f = ++freq[s[r]-'a'];
+                uniq+=(f==1);
+                if (f>maxF){ maxF=f; cntMax=1; }
+                else if (f==maxF) cntMax++;
+                if (uniq==cntMax) 
+                    cnt=max(cnt, r-l+1);
+            }
+        }
+        return cnt;
+    }
+};
