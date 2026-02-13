@@ -1,0 +1,58 @@
+problem: https://leetcode.com/problems/longest-balanced-substring-ii/description/?envType=daily-question&envId=2026-02-13
+
+solution:
+class Solution {
+private:
+    struct State {
+        int type, x, y;
+
+        bool operator==(const State &other) const {
+            return type == other.type && x == other.x && y == other.y;
+        }
+    };
+
+    struct Hash {
+        size_t operator()(const State& s) const {
+            return ((size_t)s.type * 1000000007ULL) ^
+                ((size_t)(s.x + 200000) * 1000003ULL) ^
+                (size_t)(s.y + 200000);
+        }
+    };
+    
+public:
+    int longestBalanced(string S) {
+        int N = S.size(), a = 0, b = 0, c = 0, ans = 0;
+
+        unordered_map<State, int, Hash> first;
+        first.reserve(N * 7);
+        first.max_load_factor(0.7);
+
+        for (int i = 0; i <= N; i++) {
+            if (i > 0) {
+                if (S[i - 1] == 'a') a++;
+                else if (S[i - 1] == 'b') b++;
+                else c++;
+            }
+
+            vector<State> states = {
+                {0, a - b, a - c}, // abc
+                {1, a - b, c},     // ab
+                {2, b - c, a},     // bc
+                {3, c - a, b},     // ca
+                {4, b, c},         // a
+                {5, c, a},         // b
+                {6, a, b}          // c
+            };
+
+            for (auto &st : states) {
+                if (first.count(st)) {
+                    ans = max(ans, i - first[st]);
+                } else {
+                    first[st] = i;
+                }
+            }
+        }
+
+        return ans;
+    }
+};
