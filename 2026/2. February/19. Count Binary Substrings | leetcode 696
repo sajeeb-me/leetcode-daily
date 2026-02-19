@@ -1,0 +1,19 @@
+problem: https://leetcode.com/problems/count-binary-substrings/description/?envType=daily-question&envId=2026-02-19
+
+solution:
+class Solution {
+public:
+    int countBinarySubstrings(string s) {
+        int res = 0, curr = 1, prev = 0;
+        for(int i=1; i<s.length(); i++){
+            if(s[i] != s[i-1]){
+                res += min(prev, curr);
+                prev = curr;
+                curr = 1;
+            }
+            else curr++;
+        }
+        res += min(prev, curr);
+        return res;
+    }
+};
