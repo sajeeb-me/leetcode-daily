@@ -1,0 +1,28 @@
+problem: https://leetcode.com/problems/sort-integers-by-the-number-of-1-bits/description/?envType=daily-question&envId=2026-02-25
+
+solution:
+class Solution {
+private:
+    int cntBit(int num){
+        int cnt = 0;
+        while(num){
+            cnt += (num & 1);
+            num >>= 1;
+        }
+        return cnt;
+    };
+
+public:
+    vector<int> sortByBits(vector<int>& arr) {
+        auto sorter = [&](int &a, int &b){
+            int cnt_a = cntBit(a);
+            int cnt_b = cntBit(b);
+
+            if(cnt_a == cnt_b) return a < b;
+            return cnt_a < cnt_b;
+        };
+
+        sort(arr.begin(), arr.end(), sorter);
+        return arr;
+    }
+};
