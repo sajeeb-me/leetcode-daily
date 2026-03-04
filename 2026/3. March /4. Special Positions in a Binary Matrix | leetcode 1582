@@ -1,0 +1,33 @@
+problem: https://leetcode.com/problems/special-positions-in-a-binary-matrix/description/?envType=daily-question&envId=2026-03-04
+
+solution:
+class Solution {
+private:
+    int checkR(vector<vector<int>>& mat, int i){
+        int idx = -1;
+        for(int j=0; j<mat[0].size(); j++){
+            if(mat[i][j] == 1){
+                if(idx >= 0) return -1;
+                else idx = j;
+            }
+        }
+        return idx;
+    }
+
+    bool checkCol(vector<vector<int>>& mat, int i, int idx){
+        for(int j=0; j<mat.size(); j++){
+            if(mat[j][idx] == 1 && j != i) return false;
+        }
+        return true;
+    }
+
+public:
+    int numSpecial(vector<vector<int>>& mat) {
+        int res = 0;
+        for(int i=0; i<mat.size(); i++){
+            int idx = checkR(mat, i);
+            if(idx >= 0 && checkCol(mat, i, idx)) res++;
+        }
+        return res;
+    }
+};
