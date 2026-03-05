@@ -1,0 +1,24 @@
+problem: https://leetcode.com/problems/minimum-changes-to-make-alternating-binary-string/description/?envType=daily-question&envId=2026-03-05
+
+solution:
+class Solution {
+private:
+    int helper(string s, char ch){
+        int cnt = 0;
+        for(int i=1; i<s.length(); i++){
+            char curr = s[i];
+            if(curr == ch){
+                cnt++;
+                ch = ch == '0' ? '1' : '0';
+            } else ch = curr;
+        }
+        return cnt;
+    }
+
+public:
+    int minOperations(string s) {
+        int cnt1 = helper(s, s[0]);
+        int cnt2 = helper(s, s[0] == '0' ? '1' : '0')+1;
+        return min(cnt1, cnt2);
+    }
+};
