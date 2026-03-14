@@ -1,0 +1,38 @@
+problem: https://leetcode.com/problems/the-k-th-lexicographical-string-of-all-happy-strings-of-length-n/description/?envType=daily-question&envId=2026-03-14
+
+solution:
+class Solution {
+public:
+    string getHappyString(int n, int k) {
+        int blockSize = 1 << (n - 1);
+        if (3 * blockSize < k) return "";
+
+        string result;
+
+        if (k <= blockSize) {
+            result.push_back('a');
+        } else if (k <= 2 * blockSize) {
+            result.push_back('b');
+            k -= blockSize;
+        } else {
+            result.push_back('c');
+            k -= 2 * blockSize;
+        }
+
+        vector<string> nextChars = {"bc", "ac", "ab"};
+
+        for (int pos = 1; pos < n; pos++) {
+            blockSize /= 2;
+            const string& choices = nextChars[result.back() - 'a'];
+
+            if (k <= blockSize) {
+                result.push_back(choices[0]);
+            } else {
+                result.push_back(choices[1]);
+                k -= blockSize;
+            }
+        }
+
+        return result;
+    }
+};
