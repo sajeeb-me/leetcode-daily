@@ -1,0 +1,61 @@
+problem: https://leetcode.com/problems/fancy-sequence/description/?envType=daily-question&envId=2026-03-15
+
+solution:
+class Fancy {
+private:
+    static const int MOD = 1e9 + 7;
+    vector<long long> values;
+    long long mulFactor, addFactor;
+
+    long long modPow(long long base, long long exp) {
+        long long result = 1;
+        base %= MOD;
+
+        while (exp > 0) {
+            if (exp & 1)
+                result = (result * base) % MOD;
+
+            base = (base * base) % MOD;
+            exp >>= 1;
+        }
+
+        return result;
+    }
+
+public:
+    Fancy() {
+        mulFactor = 1;
+        addFactor = 0;
+    }
+    
+    void append(int val) {
+        long long normalized = (val - addFactor + MOD) % MOD;
+        normalized = (normalized * modPow(mulFactor, MOD - 2)) % MOD;
+        values.push_back(normalized);
+    }
+    
+    void addAll(int inc) {
+        addFactor = (addFactor + inc) % MOD;
+    }
+    
+    void multAll(int m) {
+        mulFactor = (mulFactor * m) % MOD;
+        addFactor = (addFactor * m) % MOD;
+    }
+    
+    int getIndex(int idx) {
+        if (idx >= values.size())
+            return -1;
+
+        return (mulFactor * values[idx] + addFactor) % MOD;
+    }
+};
+
+/**
+ * Your Fancy object will be instantiated and called as such:
+ * Fancy* obj = new Fancy();
+ * obj->append(val);
+ * obj->addAll(inc);
+ * obj->multAll(m);
+ * int param_4 = obj->getIndex(idx);
+ */
