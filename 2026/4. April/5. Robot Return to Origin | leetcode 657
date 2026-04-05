@@ -1,0 +1,13 @@
+problem: https://leetcode.com/problems/robot-return-to-origin/description/?envType=daily-question&envId=2026-04-05
+
+solution:
+class Solution {
+public:
+    bool judgeCircle(string moves) {
+        if (moves.length() & 1) return false;
+        unordered_map<char, int> um;
+        for (char c : moves) um[c]++;
+
+        return um['U'] == um['D'] && um['L'] == um['R'];
+    }
+};
