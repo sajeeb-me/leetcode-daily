@@ -1,0 +1,9 @@
+problem: https://leetcode.com/problems/rotate-string/?envType=daily-question&envId=2026-05-03
+
+solution: 
+class Solution {
+public:
+    bool rotateString(string s, string goal) {
+        return s.length() == goal.length() && (s + s).find(goal) != string::npos;
+    }
+};
